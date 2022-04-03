@@ -1,8 +1,11 @@
 nav{
   align-items: center;
   padding: 1.5rem;
+  background-color: rgba(0, 0, 0, .5);
 }
-
+nav img{
+  width: 75%;
+}
 body{
   background: URL("./PBG-BG-4.jpg") center no-repeat;
   background-size: cover;
@@ -10,21 +13,11 @@ body{
 }
 
 .button{
-  padding: 0.5rem 1rem;
-  background-color: white;
-  color: #353533;
-  font-size: x-large;
-  border: 1px solid #353533;
-  transition: all 0.8s ease-in;
-  -webkit-transition: all 0.8s ease-in;
-  -moz-transition: all 0.8s ease-in;
-  -ms-transition: all 0.8s ease-in;
-  -o-transition: all 0.8s ease-in;
+  color: #d6d6d6;
 }
 
 .button:hover{
-  background-color: transparent;
   color: white;
-  border: 1px solid white;
+
 
 }

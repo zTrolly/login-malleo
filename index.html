@@ -9,11 +9,215 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <nav class="container-fluid">
+  <nav class="navbar">
     <div class="logo"><img src="./pbg_logo.png" alt="logo"></div>
     <div class="login">
-      <a class="button" href="#">LOGIN</a>
+      <a href="#close"
+        aria-label="Close"
+        class="close"
+        data-target="modal-example"
+        onClick="toggleModal(event)">LOGIN
+      </a>
     </div>
   </nav>
+  
+  <dialog id="modal-example">
+    <article>
+      <div class="email">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email">
+      </div>
+      <div class="password">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password">
+      </div>
+      <div class="captcha">
+        <div class="form-group">
+          <p class="optText">Click the <strong><span id="optName"></span></strong> to access Login Button</p>
+          <div class="row text-center">
+            <div class="text-center" id="noConnection">
+              <h2>NO DATABASE CONNECTION!</h2>
+            </div>
+            <div class="img" id="box_0"><a href="#" id="_0"><img src="" id="img1" class="icon" /></a></div>
+            <div class="img" id="box_1"><a href="#" id="_1"><img src="" id="img2" class="icon" /></a></div>
+            <div class="img" id="box_2"><a href="#" id="_2"><img src="" id="img3" class="icon" /></a></div>
+            <div class="img" id="box_3"><a href="#" id="_3"><img src="" id="img4" class="icon" /></a></div>
+            <div class="img" id="box_4"><a href="#" id="_4"><img src="" id="img5" class="icon" /></a></div>
+          </div>
+        </div>
+        <input type="hidden" id="optValue">
+        <button type="submit" class="btn btn-danger session" id="signBtn"><i class="fa fa-spinner fa-spin fa-2x fa-fw hide" id="icon"></i> Login</button>
+      </div>
+      <div class="btns"></div>
+    </article>
+    <footer>
+        <div class="help text-left"><a href="http://malleo.pro" target="_new">&copy; malleo</a></div>
+        <div class="help text-right session" id="helpLnk">Need Help?</div>
+    </footer>
+  </dialog>
+
+  <dialog id="modalCaptcha">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3>Attention</h3>
+					</div>
+					<div class="modal-body">
+						<p id='alertMsg'>Please Answer The Captcha!</p>
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn btn-success" id="alertBtn" data-dismiss="modal"> Ok </a>
+					</div>
+				</div>
+			</div>
+		</div>
+  </dialog>
+
+  <dialog id="modalForgot">
+
+		<div id="myHelp" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Help</h4>
+					</div>
+					<div class="modal-body">
+						<p><b>If You Don't Remember Your username/password Or Want Change Your Password.</b><br />Please Provide Your Email And Hit <b>Send Request</b>. Malleo Will Send Y
+							ou A Provisory Password That Will Allow You To Change It.</p><br />
+						<div class="form-group text-center">
+							<div class="input-group">
+								<div class="input-group-addon"><i class="fa fa-envelope fa-lg"></i></div>
+								<input type="text" class="form-control" id="email" placeholder="Email">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6 text-right">
+								<h4><b>Who Are You?</b></h4>
+							</div>
+							<div class="col-sm-6 text-left">
+								<div class="radio">
+									<label><input type="radio" name="radioName" value="U">I am an employee</label>
+								</div>
+								<div class="radio">
+									<label><input type="radio" name="radioName" value="H">I am a homeowner</label>
+								</div>
+								<div class="radio">
+									<label><input type="radio" name="radioName" value="V">I am a vendor</label>
+								</div>
+							</div>
+						</div>
+						<div id="emailBox"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" id="sendRequestBtn">Send Request</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+  </dialog>
+
+
+  <script>
+
+		/*
+	 * Modal
+	 *
+	 * Pico.css - https://picocss.com
+	 * Copyright 2019-2022 - Licensed under MIT
+	 */
+	
+	// Config
+	const isOpenClass = 'modal-is-open';
+	const openingClass = 'modal-is-opening';
+	const closingClass = 'modal-is-closing';
+	const animationDuration = 400; // ms
+	let visibleModal = null;
+	
+	
+	// Toggle modal
+	const toggleModal = event => {
+		event.preventDefault();
+		const modal = document.getElementById(event.target.getAttribute('data-target'));
+		(typeof(modal) != 'undefined' && modal != null)
+			&& isModalOpen(modal) ? closeModal(modal) : openModal(modal)
+	}
+	
+	// Is modal open
+	const isModalOpen = modal => {
+		return modal.hasAttribute('open') && modal.getAttribute('open') != 'false' ? true : false;
+	}
+	
+	// Open modal
+	const openModal = modal => {
+		if (isScrollbarVisible()) {
+			document.documentElement.style.setProperty('--scrollbar-width', `${getScrollbarWidth()}px`);
+		}
+		document.documentElement.classList.add(isOpenClass, openingClass);
+		setTimeout(() => {
+			visibleModal = modal;
+			document.documentElement.classList.remove(openingClass);
+		}, animationDuration);
+		modal.setAttribute('open', true);
+	}
+	
+	// Close modal
+	const closeModal = modal => {
+		visibleModal = null;
+		document.documentElement.classList.add(closingClass);
+		setTimeout(() => {
+			document.documentElement.classList.remove(closingClass, isOpenClass);
+			document.documentElement.style.removeProperty('--scrollbar-width');
+			modal.removeAttribute('open');
+		}, animationDuration);
+	}
+	
+	// Close with a click outside
+	document.addEventListener('click', event => {
+		if (visibleModal != null) {
+			const modalContent = visibleModal.querySelector('article') || visibleModal.querySelector('#myModal');
+			const isClickInside = modalContent.contains(event.target);
+			!isClickInside && closeModal(visibleModal);
+		}
+	});
+	
+	// Close with Esc key
+	document.addEventListener('keydown', event => {
+		if (event.key === 'Escape' && visibleModal != null) {
+			closeModal(visibleModal);
+		}
+	});
+	
+	// Get scrollbar width
+	const getScrollbarWidth = () => {
+	
+		// Creating invisible container
+		const outer = document.createElement('div');
+		outer.style.visibility = 'hidden';
+		outer.style.overflow = 'scroll'; // forcing scrollbar to appear
+		outer.style.msOverflowStyle = 'scrollbar'; // needed for WinJS apps
+		document.body.appendChild(outer);
+	
+		// Creating inner element and placing it in the container
+		const inner = document.createElement('div');
+		outer.appendChild(inner);
+	
+		// Calculating difference between container's full width and the child width
+		const scrollbarWidth = (outer.offsetWidth - inner.offsetWidth);
+	
+		// Removing temporary elements from the DOM
+		outer.parentNode.removeChild(outer);
+	
+		return scrollbarWidth;
+	}
+	
+	// Is scrollbar visible
+	const isScrollbarVisible = () => {
+		return document.body.scrollHeight > screen.height;
+	}
+	</script>
 </body>
 </html>
